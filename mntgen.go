@@ -18,7 +18,6 @@ var inodeCount uint64
 
 type Node interface {
 	fs.Node
-	GetDirentType() fuse.DirentType
 }
 
 type Dir struct {
