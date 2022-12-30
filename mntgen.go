@@ -105,7 +105,7 @@ func main() {
 	if flag.NArg() == 1 {
 		mtpt = flag.Arg(0)
 	}
-	c, err := fuse.Mount(mtpt, fuse.FSName("mntgen"), fuse.Subtype("mntgen"))
+	c, err := fuse.Mount(mtpt, fuse.FSName("mntgen"), fuse.Subtype("mntgen"), fuse.AllowOther())
 	if err != nil {
 		log.Fatal(err)
 	}
