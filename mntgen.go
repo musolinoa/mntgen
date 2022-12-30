@@ -38,6 +38,9 @@ func NewDir(fs *FS, name string) *Dir {
 			Mtime: time.Now(),
 			Ctime: time.Now(),
 			Mode:  os.ModeDir | 0o755,
+			Nlink: 2,
+			Uid: uint32(os.Getuid()),
+			Gid: uint32(os.Getgid()),
 		},
 		Entries: make(map[string]*Dir),
 	}
