@@ -1,0 +1,10 @@
+[Unit]
+Description=Mntgen(4) at $MOUNTPOINT
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/mntgen/%i.conf
+ExecStart=mntgen $MOUNTPOINT
+
+[Install]
+WantedBy=multi-user.target
