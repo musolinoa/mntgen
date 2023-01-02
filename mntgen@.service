@@ -1,5 +1,5 @@
 [Unit]
-Description=Mntgen(4) at $MOUNTPOINT
+Description=Mntgen(4) for linux - %i config
 
 [Service]
 Type=simple
