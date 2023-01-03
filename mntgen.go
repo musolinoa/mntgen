@@ -14,10 +14,6 @@ import (
 
 var inodeCount uint64
 
-type Node interface {
-	fs.Node
-}
-
 type Dir struct {
 	Fs         *FS
 	Name       string
