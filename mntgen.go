@@ -19,8 +19,8 @@ type Node interface {
 }
 
 type Dir struct {
-	Fs *FS
-	Name string
+	Fs         *FS
+	Name       string
 	Attributes fuse.Attr
 	Entries    map[string]*Dir
 }
@@ -28,7 +28,7 @@ type Dir struct {
 func NewDir(fs *FS, name string) *Dir {
 	atomic.AddUint64(&inodeCount, 1)
 	return &Dir{
-		Fs: fs,
+		Fs:   fs,
 		Name: name,
 		Attributes: fuse.Attr{
 			Inode: inodeCount,
@@ -37,8 +37,8 @@ func NewDir(fs *FS, name string) *Dir {
 			Ctime: time.Now(),
 			Mode:  os.ModeDir | 0o755,
 			Nlink: 2,
-			Uid: uint32(os.Getuid()),
-			Gid: uint32(os.Getgid()),
+			Uid:   uint32(os.Getuid()),
+			Gid:   uint32(os.Getgid()),
 		},
 		Entries: make(map[string]*Dir),
 	}
