@@ -23,14 +23,15 @@ type Dir struct {
 
 func NewDir(fs *FS, name string) *Dir {
 	atomic.AddUint64(&inodeCount, 1)
+	now := time.Now()
 	return &Dir{
 		Fs:   fs,
 		Name: name,
 		Attributes: fuse.Attr{
 			Inode: inodeCount,
-			Atime: time.Now(),
-			Mtime: time.Now(),
-			Ctime: time.Now(),
+			Atime: now,
+			Mtime: now,
+			Ctime: now,
 			Mode:  os.ModeDir | 0o755,
 			Nlink: 2,
 			Uid:   uint32(os.Getuid()),
