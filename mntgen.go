@@ -4,9 +4,7 @@ import (
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
 	"context"
-	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"sync/atomic"
@@ -92,22 +90,24 @@ func (fs FS) Root() (fs.Node, error) {
 	return fs.RootDir, nil
 }
 
+func usage() {
+	fmt.Fprintf(os.Stderr, "usage: %s [ mnt ]\n", os.Args[0])
+	os.Exit(1)
+}
+
 func main() {
-	flag.Usage = func () {
-		fmt.Fprintf(os.Stderr, "usage: %s [ mnt ]\n", os.Args[0])
-		os.Exit(1)
-	}
-	flag.Parse()
-	if flag.NArg() >= 2 {
-		flag.Usage()
-	}
 	mtpt := "/n"
-	if flag.NArg() == 1 {
-		mtpt = flag.Arg(0)
+	switch len(os.Args) {
+	case 1:
+	case 2:
+		mtpt = os.Args[1]
+	default:
+		usage()
 	}
 	c, err := fuse.Mount(mtpt, fuse.FSName("mntgen"), fuse.Subtype("mntgen"), fuse.AllowOther())
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "mount: %v\n", err)
+		os.Exit(1)
 	}
 	defer c.Close()
 	sigc := make(chan os.Signal, 1)
@@ -116,12 +116,13 @@ func main() {
 		for {
 			<-sigc
 			if err := fuse.Unmount(mtpt); err != nil {
-				log.Print("unmount failed: ", err)
+				fmt.Fprintf(os.Stderr, "unmount failed: %v\n", err)
 			}
 		}
 	}()
 	err = fs.Serve(c, NewFS())
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "serve: %v\n", err)
+		os.Exit(1)
 	}
 }
