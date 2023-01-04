@@ -60,14 +60,12 @@ func (d *Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
 }
 
 func (d *Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
-	var entries []fuse.Dirent
-	for k, v := range d.Entries {
-		var a fuse.Attr
-		v.Attr(ctx, &a)
+	entries := make([]fuse.Dirent, 0, len(d.Entries))
+	for name, entry := range d.Entries {
 		entries = append(entries, fuse.Dirent{
-			Inode: a.Inode,
+			Inode: entry.Attributes.Inode,
 			Type:  fuse.DT_Dir,
-			Name:  k,
+			Name:  name,
 		})
 	}
 	return entries, nil
